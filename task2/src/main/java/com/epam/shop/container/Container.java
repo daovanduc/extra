@@ -262,11 +262,6 @@ public class Container<T extends Vehicle> implements List<T> {
         throw new UnsupportedOperationException();
     }
 
-    @Override
-    public String toString() {
-        return Arrays.toString(vehicles);
-    }
-
     private class IteratorImpl<T> implements Iterator<T> {
 
         private int cursor;

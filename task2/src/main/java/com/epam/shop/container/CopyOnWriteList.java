@@ -8,10 +8,16 @@ import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.function.Consumer;
 
-public class ListContainer<T extends Vehicle> extends Container  {
+public class CopyOnWriteList<T extends Vehicle> extends Container<T>  {
+
+    @Override
+    public boolean remove(Object o) {
+        return super.remove(o);
+    }
 
     @Override
     public Iterator<T> iterator() {
+
         int size = size();
         T[] newArray = (T[]) Arrays.copyOf(toArray(),size());
         return new IteratorList<T>(newArray,size);
@@ -35,6 +41,11 @@ public class ListContainer<T extends Vehicle> extends Container  {
         }
 
         @Override
+        public void remove() {
+            CopyOnWriteList.this.remove(buffered[--cursor]);
+        }
+
+        @Override
         public T next() {
             checkNext();
             if (noCondition()) {
@@ -44,10 +55,6 @@ public class ListContainer<T extends Vehicle> extends Container  {
             }
         }
 
-        @Override
-        public void remove() {
-            throw new UnsupportedOperationException();
-        }
 
         @Override
         public void forEachRemaining(Consumer<? super T> action) {
